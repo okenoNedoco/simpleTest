@@ -12,6 +12,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # ▼▼▼▼▼ このデバッグ用ステップを追加 ▼▼▼▼▼
+    - name: List all files in the repository
+      run: ls -R
+      shell: bash
+    # ▲▲▲▲▲ 追加ここまで ▲▲▲▲▲
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
