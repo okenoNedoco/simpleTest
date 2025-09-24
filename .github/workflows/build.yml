@@ -12,11 +12,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # ▼▼▼▼▼ このデバッグ用ステップを追加 ▼▼▼▼▼
-    - name: List all files in the repository
+    - name: List files (for debugging)
       run: ls -R
-      shell: bash
-    # ▲▲▲▲▲ 追加ここまで ▲▲▲▲▲
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -26,12 +23,17 @@ jobs:
     - name: Install PyInstaller
       run: python -m pip install --upgrade pip pyinstaller
 
+    # ▼▼▼▼▼ このステップを修正 ▼▼▼▼▼
     - name: Build with PyInstaller
-      working-directory: HelloWorld
+      # working-directory を削除。リポジトリのルートで直接実行する
       run: pyinstaller --noconfirm --clean HelloWorld.spec
+    # ▲▲▲▲▲ 修正ここまで ▲▲▲▲▲
 
+    # ▼▼▼▼▼ このステップもパスを修正 ▼▼▼▼▼
     - name: Archive macOS artifact
-      run: ditto -c -k --sequesterRsrc --keepParent HelloWorld/dist/HelloWorld.app HelloWorld-macOS.zip
+      # パスから HelloWorld/ を削除
+      run: ditto -c -k --sequesterRsrc --keepParent dist/HelloWorld.app HelloWorld-macOS.zip
+    # ▲▲▲▲▲ 修正ここまで ▲▲▲▲▲
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
