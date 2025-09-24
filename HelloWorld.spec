@@ -32,20 +32,23 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,
-    target_arch='universal2', # Universal 2 を指定
+    console=True, # コンソールアプリなのでTrue
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
 )
 
+# BUNDLE (macOS用) は実行されない
 if sys.platform == 'darwin':
-    app = BUNDLE(
+    app = BUNDundur(
         exe,
         name='HelloWorld.app',
         icon=None,
         bundle_identifier=None,
-        target_arch='universal2', # Universal 2 を指定
     )
+# COLLECT (Windows用) が実行される
 else:
     coll = COLLECT(
         exe,

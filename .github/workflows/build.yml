@@ -1,19 +1,16 @@
-name: Build HelloWorld for macOS (Universal)
+name: Build HelloWorld for Windows
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  build-macos-universal:
-    runs-on: macos-latest
+  build-windows:
+    runs-on: windows-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: List files (for debugging)
-      run: ls -R
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -23,20 +20,16 @@ jobs:
     - name: Install PyInstaller
       run: python -m pip install --upgrade pip pyinstaller
 
-    # ▼▼▼▼▼ このステップを修正 ▼▼▼▼▼
     - name: Build with PyInstaller
-      # working-directory を削除。リポジトリのルートで直接実行する
-      run: pyinstaller --noconfirm --clean HelloWorld.spec
-    # ▲▲▲▲▲ 修正ここまで ▲▲▲▲▲
+      # working-directory: HelloWorld  # ★あなたのフォルダ構成に合わせて調整
+      run: pyinstaller --noconfirm --clean HelloWorld/HelloWorld.spec # ★specファイルのパスを調整
 
-    # ▼▼▼▼▼ このステップもパスを修正 ▼▼▼▼▼
-    - name: Archive macOS artifact
-      # パスから HelloWorld/ を削除
-      run: ditto -c -k --sequesterRsrc --keepParent dist/HelloWorld.app HelloWorld-macOS.zip
-    # ▲▲▲▲▲ 修正ここまで ▲▲▲▲▲
+    - name: Archive Windows artifact
+      run: Compress-Archive -Path dist/HelloWorld -DestinationPath HelloWorld-Windows.zip
+      shell: powershell
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: HelloWorld-macOS
-        path: HelloWorld-macOS.zip
+        name: HelloWorld-Windows
+        path: HelloWorld-Windows.zip
