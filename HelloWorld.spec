@@ -5,7 +5,7 @@ import sys
 block_cipher = None
 
 a = Analysis(
-    ['hello.py'],
+    ['simpleTest.py'],
     pathex=[],
     binaries=[],
     datas=[],
